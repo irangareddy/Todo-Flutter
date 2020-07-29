@@ -1,12 +1,18 @@
 import 'package:Todo/widgets/task_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:Todo/models/task.dart';
 
-class TasksList extends StatelessWidget {
+class TasksList extends StatefulWidget {
 
-  List <dynamic> _tasks = [
-    ['100DaysOfSwiftUI by Paul Haudson',false],
-    ['DesignCourse by Meng To',false]
-  ];
+  final List<Task> tasks;
+
+  TasksList({this.tasks});
+
+  @override
+  _TasksListState createState() => _TasksListState();
+}
+
+class _TasksListState extends State<TasksList> {
 
 
   @override
@@ -21,11 +27,15 @@ class TasksList extends StatelessWidget {
           ),
         ),
         child: ListView(
-          children: <Widget>[
-            TaskTile(task: '100DaysOfSwiftUI by Paul Haudson'),
-            TaskTile(task: 'DesignCourse by Meng To'),
-            TaskTile(task: 'Prepare for DXC Interview Exam'),
-          ],
+          children: widget.tasks.map((task) => TaskTile(
+            taskTitle: task.name,
+            isChecked: task.isDone,
+            checkboxCallBack: (checkboxState){
+              setState(() {
+                task.toggleDone();
+              });
+            },
+          ),).toList(),
         ),
       ),
     );
